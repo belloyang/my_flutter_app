@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_flutter_app/homepage.dart';
+import './homepage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.green,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page', count: 2),
+      home: const MyHomePage(title: 'Harvester Demo App', count: 2),
     );
   }
 
