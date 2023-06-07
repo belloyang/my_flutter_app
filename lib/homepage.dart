@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:filesystem_picker/filesystem_picker.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title, required this.count});
@@ -39,6 +42,28 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  Future<void> openFolder() async {
+  // Show the file picker dialog
+  String? filePath = await FilesystemPicker.open(
+    title: 'Select a folder',
+    context: context,
+    rootDirectory: Directory('/'), // Set the initial directory
+    fsType: FilesystemType.folder,
+    pickText: 'Select',
+    folderIconColor: Colors.teal,
+  );
+
+  // Handle the selected file path
+  if (filePath != null) {
+    // Use the selected file path
+    print('Selected file: $filePath');
+  } else {
+    // No file selected
+    print('No file selected');
+  }
+
+  }
+
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -74,7 +99,10 @@ class _MyHomePageState extends State<MyHomePage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            
+            ElevatedButton(
+              onPressed: openFolder,
+              child: const Text('Open Folder'),
+            ),
             Padding(
               padding: newMethod(),
               child: const Text(
@@ -85,6 +113,7 @@ class _MyHomePageState extends State<MyHomePage> {
               '$_counter',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
+            
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children:[
