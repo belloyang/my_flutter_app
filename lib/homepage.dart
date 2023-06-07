@@ -25,6 +25,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
   String _output = '';
+  String? folderPath = "";
 
   void _incrementCounter() {
     setState(() {
@@ -42,26 +43,23 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void _updatePath(String? filePath) {
+    setState(() {
+      folderPath = filePath; 
+    });
+  }
   Future<void> openFolder() async {
   // Show the file picker dialog
   String? filePath = await FilesystemPicker.open(
     title: 'Select a folder',
     context: context,
-    rootDirectory: Directory('/'), // Set the initial directory
+    rootDirectory: Directory.systemTemp, // Set the initial directory
     fsType: FilesystemType.folder,
     pickText: 'Select',
     folderIconColor: Colors.teal,
   );
-
-  // Handle the selected file path
-  if (filePath != null) {
-    // Use the selected file path
-    print('Selected file: $filePath');
-  } else {
-    // No file selected
-    print('No file selected');
-  }
-
+  _updatePath(filePath);
+  
   }
 
   @override
@@ -76,7 +74,7 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text("${widget.title}.${widget.count}"),
+        title: Text(widget.title),
       ),
       body: ListView(
         // Center is a layout widget. It takes a single child and positions it
@@ -106,22 +104,19 @@ class _MyHomePageState extends State<MyHomePage> {
             Padding(
               padding: newMethod(),
               child: const Text(
-                'You have click the button this many times:',
+                'You have click the button this many times',
               ),
             ),
             Text(
               '$_counter',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
+            Text(
+                'Output: $folderPath',
+                textAlign: TextAlign.center,
+                maxLines: null,
+                ),
             
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children:[
-              ElevatedButton(onPressed: () {
-                _updateOutput();
-              }, child: const Text('Click me')),
-              Text('Output: $_output'),
-            ])
           ],
         )],
       ),
