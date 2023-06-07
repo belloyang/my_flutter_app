@@ -25,7 +25,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
   String _output = '';
-  String? folderPath = "";
+  String? inputFile = "";
+  String? outputFolder = "";
 
   void _incrementCounter() {
     setState(() {
@@ -43,12 +44,18 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  void _updatePath(String? filePath) {
+  void _updateFolderPath(String? filePath) {
     setState(() {
-      folderPath = filePath; 
+      outputFolder = filePath; 
     });
   }
-  Future<void> openFolder() async {
+
+  void _updateFilePath(String? filePath) {
+    setState(() {
+      inputFile = filePath; 
+    });
+  }
+  Future<void> selectFolder() async {
   // Show the file picker dialog
   String? filePath = await FilesystemPicker.open(
     title: 'Select a folder',
@@ -58,7 +65,21 @@ class _MyHomePageState extends State<MyHomePage> {
     pickText: 'Select',
     folderIconColor: Colors.teal,
   );
-  _updatePath(filePath);
+  _updateFolderPath(filePath);
+  
+  }
+
+  Future<void> selectFile() async {
+  // Show the file picker dialog
+  String? filePath = await FilesystemPicker.open(
+    title: 'Select a file',
+    context: context,
+    rootDirectory: Directory.systemTemp, // Set the initial directory
+    fsType: FilesystemType.file,
+    pickText: 'Select',
+    folderIconColor: Colors.teal,
+  );
+  _updateFilePath(filePath);
   
   }
 
@@ -98,24 +119,24 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             ElevatedButton(
-              onPressed: openFolder,
-              child: const Text('Open Folder'),
+              onPressed: selectFile,
+              child: const Text('Select a file'),
             ),
-            Padding(
-              padding: newMethod(),
-              child: const Text(
-                'You have click the button this many times',
-              ),
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-            Text(
-                'Output: $folderPath',
+             Text(
+                'InputFile: $inputFile',
                 textAlign: TextAlign.center,
                 maxLines: null,
-                ),
+            ),
+            ElevatedButton(
+              onPressed: selectFolder,
+              child: const Text('Select a folder'),
+            ),
+             Text(
+                'OutputFolder: $outputFolder',
+                textAlign: TextAlign.center,
+                maxLines: null,
+            ),
+           
             
           ],
         )],
